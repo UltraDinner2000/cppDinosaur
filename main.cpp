@@ -1,6 +1,38 @@
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 
 
+sf::Texture dinoTexture;
+sf::Texture dinoTexture1;
+sf::Texture kaktuzTexture;
+sf::Texture cloudTexture;
+sf::Texture groundTexture;
+sf::Texture nloTexture;
+sf::Texture mountainsTexture;   
+sf::Texture sunTexture;   
+
+sf::Font font;
+
+sf::Sprite dinoSprite1;
+sf::Sprite kaktuzSprite1;
+sf::Sprite kaktuzSprite2;
+sf::Sprite cloudSprite1;
+sf::Sprite cloudSprite2;
+sf::Sprite mountainsSprite;
+sf::Sprite nloSprite;
+sf::Sprite groundSprite;
+sf::Sprite groundSprite2;
+sf::Sprite sunSprite;
+
+sf::RectangleShape kaktuzRestart;
+sf::RectangleShape groundRestart;
+sf::RectangleShape ground2;
+sf::RectangleShape bg;
+
+sf::SoundBuffer buffer0;
+sf::SoundBuffer buffer1;
+sf::Sound sound0;
+sf::Sound sound1;
 
 int main() {
 
@@ -12,32 +44,23 @@ int main() {
     int curTextureDino = FIRST_TEXTURE;
 
     sf::RenderWindow window(sf::VideoMode(1366, 768), "Dinosaur");
-    
-    sf::Texture dinoTexture;
+
     dinoTexture.loadFromFile("materials/dinosaur.png");
 
-    sf::Texture dinoTexture1;
     dinoTexture1.loadFromFile("materials/dinoTexture.png");
 
-    sf::Texture kaktuzTexture;
     kaktuzTexture.loadFromFile("materials/koktuz.png");
 
-    sf::Texture cloudTexture;
     cloudTexture.loadFromFile("materials/cloud.png");
 
-    sf::Texture groundTexture;
     groundTexture.loadFromFile("materials/ground.png");
 
-    sf::Texture nloTexture;
     nloTexture.loadFromFile("materials/nlo.png");
 
-    sf::Texture mountainsTexture;
     mountainsTexture.loadFromFile("materials/mountains.png");
 
-    sf::Texture sunTexture;
     sunTexture.loadFromFile("materials/sun.png");
 
-    sf::Font font;
     font.loadFromFile("materials/Keleti-Regular.ttf");
 
     sf::Text scoreText("", font);
@@ -47,73 +70,62 @@ int main() {
     int score = 0;
 
 
-    sf::Sprite dinoSprite1;
+
     dinoSprite1.setTexture(dinoTexture);
     dinoSprite1.setPosition(200, 470);
     dinoSprite1.setScale(1.2f, 1.2f);
 
-    sf::Sprite kaktuzSprite1;
+
     kaktuzSprite1.setTexture(kaktuzTexture);
     kaktuzSprite1.setTextureRect(sf::IntRect(0, 0, 50, 100));
     kaktuzSprite1.setPosition(1366, 500);
     kaktuzSprite1.setScale(0.9f, 0.9f);
 
-    sf::Sprite kaktuzSprite2;
     kaktuzSprite2.setTexture(kaktuzTexture);
     kaktuzSprite2.setTextureRect(sf::IntRect(227, 0, 80, 100));
     kaktuzSprite2.setPosition(1366, 500);
 
-    sf::Sprite cloudSprite1;
     cloudSprite1.setTexture(cloudTexture);
     cloudSprite1.setTextureRect(sf::IntRect(0, 0, 48, 32));
     cloudSprite1.setPosition(1366, 200);
     cloudSprite1.setScale(2.0f, 2.0f);
 
-    sf::Sprite cloudSprite2;
     cloudSprite2.setTexture(cloudTexture);
     cloudSprite2.setTextureRect(sf::IntRect(99, 0, 96, 32));
     cloudSprite2.setPosition(1366, 100);
     cloudSprite2.setScale(2.0f, 2.0f);
 
-    sf::Sprite mountainsSprite;
     mountainsSprite.setTexture(mountainsTexture);
     mountainsSprite.setPosition(1366, 420);
     mountainsSprite.setScale(2.0f, 2.0f);
 
-    sf::Sprite nloSprite;
     nloSprite.setTexture(nloTexture);
-    nloSprite.setPosition(1366, 220);
+    nloSprite.setPosition(1366, 200);
     nloSprite.setScale(2.0f, 2.0f);
 
-    sf::Sprite groundSprite;
     groundSprite.setTexture(groundTexture);
     groundSprite.setPosition(0, 500);
 
-    sf::Sprite groundSprite2;
     groundSprite2.setTexture(groundTexture);
     groundSprite2.setPosition(1366, 500);
 
-    sf::Sprite sunSprite;
     sunSprite.setTexture(sunTexture);
     sunSprite.setPosition(1366, 300);
     sunSprite.setScale(6.0f, 6.0f);
 
-    sf::RectangleShape kaktuzRestart;
+
     kaktuzRestart.setSize(sf::Vector2f(96, 768));
     kaktuzRestart.setFillColor(sf::Color(255, 255, 255));
     kaktuzRestart.setPosition(-100, 0);
 
-    sf::RectangleShape groundRestart;
     groundRestart.setSize(sf::Vector2f(96, 768));
     groundRestart.setFillColor(sf::Color(255, 255, 255));
     groundRestart.setPosition(-1450, 0);
 
-    sf::RectangleShape ground2;
     ground2.setSize(sf::Vector2f(1366, 500));
     ground2.setFillColor(sf::Color(255, 255, 255));
     ground2.setPosition(0, 580);
 
-    sf::RectangleShape bg;
     bg.setSize(sf::Vector2f(1366, 768));
     bg.setFillColor(sf::Color(255, 255, 255));
 
@@ -132,6 +144,14 @@ int main() {
     float sunSpeed = 0.0f;
     bool isJumping = false;
     bool isMaxSpeed = false;
+
+    buffer0.loadFromFile("materials/jg-032316-sfx-8-bit-pong-sound.mp3");
+    buffer1.loadFromFile("materials/lox.mp3");
+
+    sound0.setBuffer(buffer0);
+    sound1.setBuffer(buffer1);
+
+    sound1.play();
 
     while (window.isOpen())
     {
@@ -192,6 +212,7 @@ int main() {
         }
         if (kaktuzSprite1.getGlobalBounds().intersects(kaktuzRestart.getGlobalBounds())) {
             kaktuzSprite1.setPosition(1366, 500);
+            sound0.play();
             speed -= 0.1;
             score += 10;
         }
@@ -208,7 +229,7 @@ int main() {
             cloudSpeed2 -= 0.1;
         }
         if (nloSprite.getGlobalBounds().intersects(kaktuzRestart.getGlobalBounds())) {
-            nloSprite.setPosition(2300, 220);
+            nloSprite.setPosition(3500, 220);
             nloSpeed -= 1;
         }
         if (mountainsSprite.getGlobalBounds().intersects(kaktuzRestart.getGlobalBounds())) {
@@ -262,6 +283,7 @@ int main() {
         }
 
         scoreText.setString("Score: " + std::to_string(score));
+
 
         window.clear();
         window.draw(bg);
