@@ -11,7 +11,7 @@ int main() {
 
     int curTextureDino = FIRST_TEXTURE;
 
-    sf::RenderWindow window(sf::VideoMode(1366, 768), "window");
+    sf::RenderWindow window(sf::VideoMode(1366, 768), "Dinosaur");
     
     sf::Texture dinoTexture;
     dinoTexture.loadFromFile("materials/dinosaur.png");
@@ -33,6 +33,9 @@ int main() {
 
     sf::Texture mountainsTexture;
     mountainsTexture.loadFromFile("materials/mountains.png");
+
+    sf::Texture sunTexture;
+    sunTexture.loadFromFile("materials/sun.png");
 
     sf::Font font;
     font.loadFromFile("materials/Keleti-Regular.ttf");
@@ -90,6 +93,11 @@ int main() {
     groundSprite2.setTexture(groundTexture);
     groundSprite2.setPosition(1366, 500);
 
+    sf::Sprite sunSprite;
+    sunSprite.setTexture(sunTexture);
+    sunSprite.setPosition(1366, 300);
+    sunSprite.setScale(6.0f, 6.0f);
+
     sf::RectangleShape kaktuzRestart;
     kaktuzRestart.setSize(sf::Vector2f(96, 768));
     kaktuzRestart.setFillColor(sf::Color(255, 255, 255));
@@ -99,6 +107,11 @@ int main() {
     groundRestart.setSize(sf::Vector2f(96, 768));
     groundRestart.setFillColor(sf::Color(255, 255, 255));
     groundRestart.setPosition(-1450, 0);
+
+    sf::RectangleShape ground2;
+    ground2.setSize(sf::Vector2f(1366, 500));
+    ground2.setFillColor(sf::Color(255, 255, 255));
+    ground2.setPosition(0, 580);
 
     sf::RectangleShape bg;
     bg.setSize(sf::Vector2f(1366, 768));
@@ -116,6 +129,7 @@ int main() {
     float jumpSpeed = 0.0f;
     float mountainsSpeed = 0.0f;
     float groundSpeed = -2.0f;
+    float sunSpeed = 0.0f;
     bool isJumping = false;
     bool isMaxSpeed = false;
 
@@ -148,8 +162,11 @@ int main() {
             if (score == 150) {
                mountainsSpeed = -3.0f;
             }
+            if (score == 170) {
+                sunSpeed = -1.0f;
+            }
             if (score == 200) {
-                nloSpeed = -15.0f;
+                nloSpeed = -17.0f;
             }
             if (score == 50) {
                 cloudSpeed2 = -6.0f;
@@ -157,11 +174,11 @@ int main() {
             if (score == 20) {
                 cloudSpeed = -5.0f;
             }
-            if (score >= 200) {
-                speed = -10.0f;
-                speed2 = -10.0f;
+            if (score >= 170) {
+                speed = -9.7f;
+                speed2 = -9.7f;
             }
-
+ 
         }
 
         if (dinoSprite1.getGlobalBounds().intersects(kaktuzSprite1.getGlobalBounds())) {
@@ -191,7 +208,7 @@ int main() {
             cloudSpeed2 -= 0.1;
         }
         if (nloSprite.getGlobalBounds().intersects(kaktuzRestart.getGlobalBounds())) {
-            nloSprite.setPosition(2000, 220);
+            nloSprite.setPosition(2300, 220);
             nloSpeed -= 1;
         }
         if (mountainsSprite.getGlobalBounds().intersects(kaktuzRestart.getGlobalBounds())) {
@@ -231,8 +248,10 @@ int main() {
         mountainsSprite.move(sf::Vector2f(mountainsSpeed, 0));
         groundSprite.move(sf::Vector2f(groundSpeed, 0));
         groundSprite2.move(sf::Vector2f(groundSpeed, 0));
+        sunSprite.move(sf::Vector2f(sunSpeed, 0));
 
         if (isJumping) {
+            dinoSprite1.setTexture(dinoTexture1);
             dinoSprite1.move(0, jumpSpeed);
             jumpSpeed += 0.3f;
 
@@ -246,6 +265,8 @@ int main() {
 
         window.clear();
         window.draw(bg);
+        window.draw(sunSprite);
+        window.draw(ground2);
         window.draw(mountainsSprite);
         window.draw(groundSprite);
         window.draw(groundSprite2);
